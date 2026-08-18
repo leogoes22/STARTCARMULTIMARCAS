@@ -1177,7 +1177,16 @@ h1, h2, h3, .t {
        mantendo os mesmos nomes de campos. <<<
    ========================================================= */
 
+/* =========================================================
+   INTEGRAÇÃO COM O CRM / AUTOCERTO
+   Endpoint do workflow n8n "Start Car · 02 Entrega Estoque".
+   Enquanto estiver com SEU-N8N, o site usa o estoque embutido
+   abaixo. Troque pela URL real e a vitrine passa a ser ao vivo.
+   ========================================================= */
+var API_ESTOQUE = 'https://SEU-N8N.com.br/webhook/estoque-startcar';
+
 var LOJA = {
+  api: API_ESTOQUE,
   nome: 'Start Car Multimarcas',
   slogan: 'Tradicional agência de revenda de veículos',
   telefone: '(21) 99131-4232',
@@ -1418,6 +1427,48 @@ var STOCK = [
     t.classList.add('show');
     clearTimeout(t._tm);
     t._tm = setTimeout(function () { t.classList.remove('show'); }, 4200);
+  };
+
+  /* ---------- Sincronização com o estoque ao vivo ----------
+     Busca o estoque no webhook do n8n. Se falhar, demorar demais
+     ou vier vazio, o site continua com o estoque embutido em data.js.
+     ---------------------------------------------------------- */
+  SC.atualizadoEm = null;
+
+  SC.sync = function (aoAtualizar) {
+    var url = (typeof LOJA !== 'undefined' && LOJA.api) ? LOJA.api : '';
+    if (!url || url.indexOf('SEU-N8N') > -1 || typeof fetch !== 'function') return;
+
+    var opcoes = {}, ctrl;
+    try {
+      ctrl = new AbortController();
+      opcoes.signal = ctrl.signal;
+      setTimeout(function () { try { ctrl.abort(); } catch (e) {} }, 8000);
+    } catch (e) {}
+
+    fetch(url, opcoes)
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+      .then(function (d) {
+        if (!d || d.ok !== true || !Array.isArray(d.veiculos) || !d.veiculos.length) {
+          return Promise.reject('cache vazio');
+        }
+        STOCK.length = 0;
+        d.veiculos.forEach(function (v) { STOCK.push(v); });
+        SC.atualizadoEm = d.atualizadoEm || null;
+        SC.marcarAtualizacao();
+        if (typeof aoAtualizar === 'function') aoAtualizar(STOCK);
+      })
+      .catch(function () { /* silencioso: mantém o estoque embutido */ });
+  };
+
+  SC.marcarAtualizacao = function () {
+    if (!SC.atualizadoEm) return;
+    var d = new Date(SC.atualizadoEm);
+    if (isNaN(d)) return;
+    var txt = 'Estoque atualizado em ' +
+      d.toLocaleDateString('pt-BR') + ' às ' +
+      d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    $$('[data-atualizado]').forEach(function (el) { el.textContent = txt; });
   };
 
   /* ---------- Header ---------- */
