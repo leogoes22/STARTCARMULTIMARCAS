@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Financiamento · Start Car Multimarcas</title>
+<meta name="description" content="Simule o financiamento do seu próximo carro na Start Car Multimarcas. Em até 60x, com ou sem entrada, resposta no mesmo dia.">
+<meta name="theme-color" content="#050506">
+<link rel="icon" href="assets/img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="hd solid">
+  <div class="wrap">
+    <a href="index.html" class="brand"><img src="assets/img/logo_transparente.png" alt="Start Car Multimarcas"></a>
+    <nav class="nav">
+      <a href="index.html">Início</a>
+      <a href="index.html#sobre">A Loja</a>
+      <a href="estoque.html">Estoque</a>
+      <a href="financiamento.html" class="on">Financiamento</a>
+      <a href="consignacao.html">Venda seu Carro</a>
+      <a href="index.html#localizacao">Localização</a>
+    </nav>
+    <div class="hd-cta">
+      <a class="btn btn-ouro btn-sm" href="https://wa.me/5521991314232" target="_blank" rel="noopener">Falar agora</a>
+      <button class="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="drawer">
+  <div class="wrap">
+    <a href="index.html">Início</a>
+    <a href="index.html#sobre">A Loja</a>
+    <a href="estoque.html">Estoque</a>
+    <a href="financiamento.html">Financiamento</a>
+    <a href="consignacao.html">Venda seu Carro</a>
+    <a href="index.html#localizacao">Localização</a>
+    <a class="btn btn-ouro btn-block" href="https://wa.me/5521991314232" target="_blank" rel="noopener">Falar no WhatsApp</a>
+  </div>
+</div>
+
+<section class="ph">
+  <div class="wrap">
+    <p class="crumb"><a href="index.html">Início</a> / Financiamento</p>
+    <p class="eyebrow">Crédito facilitado</p>
+    <h1 class="h-sec"><span class="cromo">Simule seu</span> <span class="ouro">financiamento</span></h1>
+    <p class="lead">Preencha os dados abaixo e nossa equipe envia sua proposta para análise nos principais bancos. Em até 60x, com ou sem entrada — e aceitamos seu usado na troca.</p>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:3rem">
+  <div class="wrap">
+    <div class="form-wrap">
+
+      <!-- FORM -->
+      <div class="form-card rv">
+        <p class="eyebrow">Passo único</p>
+        <h2 class="h-sec" style="font-size:clamp(1.8rem,3.4vw,2.6rem);margin-bottom:.5rem"><span class="cromo">Seus dados</span></h2>
+        <p class="lead" style="margin-bottom:1.8rem;font-size:.94rem">Leva menos de 2 minutos. Ao enviar, sua solicitação vai direto para o WhatsApp do nosso consultor com o veículo escolhido já anexado.</p>
+
+        <form id="frm" novalidate>
+          <div class="form-grid">
+            <div class="fld full">
+              <label for="nome">Nome completo <i>*</i></label>
+              <input id="nome" name="nome" required placeholder="Como está no documento">
+              <span class="erro">Informe seu nome completo.</span>
+            </div>
+            <div class="fld">
+              <label for="cpf">CPF <i>*</i></label>
+              <input id="cpf" name="cpf" data-mask="cpf" required inputmode="numeric" placeholder="000.000.000-00">
+              <span class="erro">Informe seu CPF.</span>
+            </div>
+            <div class="fld">
+              <label for="nasc">Data de nascimento <i>*</i></label>
+              <input id="nasc" name="nasc" type="date" required>
+              <span class="erro">Informe sua data de nascimento.</span>
+            </div>
+            <div class="fld">
+              <label for="tel">Telefone / WhatsApp <i>*</i></label>
+              <input id="tel" name="tel" data-mask="tel" required inputmode="tel" placeholder="(21) 90000-0000">
+              <span class="erro">Informe um telefone para contato.</span>
+            </div>
+            <div class="fld">
+              <label for="email">E-mail</label>
+              <input id="email" name="email" type="email" placeholder="voce@email.com">
+            </div>
+            <div class="fld">
+              <label for="prof">Profissão / Ocupação <i>*</i></label>
+              <input id="prof" name="prof" required placeholder="Ex.: Autônomo, CLT, Aposentado">
+              <span class="erro">Informe sua ocupação.</span>
+            </div>
+            <div class="fld">
+              <label for="renda">Renda mensal <i>*</i></label>
+              <input id="renda" name="renda" data-mask="moeda" required inputmode="numeric" placeholder="R$ 0,00">
+              <span class="erro">Informe sua renda mensal.</span>
+            </div>
+            <div class="fld">
+              <label for="entrada">Valor de entrada</label>
+              <input id="entrada" name="entrada" data-mask="moeda" inputmode="numeric" placeholder="R$ 0,00">
+            </div>
+            <div class="fld">
+              <label for="parcelas">Quantidade de parcelas</label>
+              <select id="parcelas" name="parcelas">
+                <option>12x</option><option>24x</option><option>36x</option>
+                <option selected>48x</option><option>60x</option>
+              </select>
+            </div>
+            <div class="fld">
+              <label for="troca">Vai dar um carro na troca?</label>
+              <select id="troca" name="troca">
+                <option>Não</option>
+                <option>Sim</option>
+              </select>
+            </div>
+            <div class="fld" id="wrapTroca" style="display:none">
+              <label for="trocaDesc">Qual carro entra na troca?</label>
+              <input id="trocaDesc" name="trocaDesc" placeholder="Marca, modelo, ano e km">
+            </div>
+            <div class="fld full">
+              <label for="obs">Observações</label>
+              <textarea id="obs" name="obs" placeholder="Conte qualquer detalhe que ajude na análise (restrição no nome, comprovação de renda, urgência…)."></textarea>
+            </div>
+          </div>
+
+          <div class="consent">
+            <input type="checkbox" id="lgpd" required>
+            <label for="lgpd">Autorizo a Start Car Multimarcas a utilizar meus dados para análise de crédito e contato comercial, conforme a <a href="#" data-pol>Política de Privacidade</a>.</label>
+          </div>
+
+          <button type="submit" class="btn btn-ouro btn-block" style="margin-top:1.6rem">Enviar solicitação</button>
+          <p style="color:var(--txt-3);font-size:.78rem;text-align:center;margin-top:.9rem">Envio sem compromisso · Seus dados não são compartilhados com terceiros</p>
+        </form>
+      </div>
+
+      <!-- VEÍCULO ESCOLHIDO -->
+      <aside>
+        <div class="aside-car rv" id="aside"></div>
+
+        <div class="form-card rv" style="margin-top:1.4rem;padding:1.4rem">
+          <h4 class="sub-t" style="margin-bottom:.9rem">Como funciona</h4>
+          <div style="display:grid;gap:.9rem">
+            <div style="display:flex;gap:.8rem"><b class="ouro" style="font-family:var(--ff-t);font-size:1.5rem;line-height:1">01</b><p style="color:var(--txt-2);font-size:.9rem">Você preenche o formulário com o veículo escolhido.</p></div>
+            <div style="display:flex;gap:.8rem"><b class="ouro" style="font-family:var(--ff-t);font-size:1.5rem;line-height:1">02</b><p style="color:var(--txt-2);font-size:.9rem">Enviamos sua proposta para os bancos parceiros.</p></div>
+            <div style="display:flex;gap:.8rem"><b class="ouro" style="font-family:var(--ff-t);font-size:1.5rem;line-height:1">03</b><p style="color:var(--txt-2);font-size:.9rem">Retornamos com as melhores condições — em geral no mesmo dia.</p></div>
+            <div style="display:flex;gap:.8rem"><b class="ouro" style="font-family:var(--ff-t);font-size:1.5rem;line-height:1">04</b><p style="color:var(--txt-2);font-size:.9rem">Aprovado, é só vir buscar a chave na loja.</p></div>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</section>
+
+<section class="sec sec-alt">
+  <div class="wrap">
+    <div class="head-row rv">
+      <div>
+        <p class="eyebrow">Ainda escolhendo</p>
+        <h2 class="h-sec"><span class="cromo">Veja outros</span> <span class="ouro">veículos</span></h2>
+      </div>
+      <a class="btn btn-ghost" href="estoque.html">Estoque completo</a>
+    </div>
+    <div class="grid-cars" id="outros"></div>
+  </div>
+</section>
+
+<footer class="ft">
+  <div class="wrap">
+    <div class="ft-grid">
+      <div>
+        <img class="lg" src="assets/img/logo_transparente.png" alt="Start Car Multimarcas">
+        <p>Tradicional agência de revenda de veículos novos e usados, nacionais e importados.</p>
+        <div class="social">
+          <a href="https://www.instagram.com/startcarrj" target="_blank" rel="noopener">IG</a>
+          <a href="https://www.facebook.com/startcarautomoveis" target="_blank" rel="noopener">FB</a>
+          <a href="https://wa.me/5521991314232" target="_blank" rel="noopener">WA</a>
+        </div>
+      </div>
+      <div><h5>Navegação</h5><ul>
+        <li><a href="index.html">Início</a></li>
+        <li><a href="estoque.html">Estoque</a></li>
+        <li><a href="financiamento.html">Financiamento</a></li>
+        <li><a href="consignacao.html">Venda seu carro</a></li>
+      </ul></div>
+      <div><h5>Atendimento</h5><ul>
+        <li><a href="tel:+5521991314232">(21) 99131-4232</a></li>
+        <li><a href="https://wa.me/5521991314232" target="_blank" rel="noopener">WhatsApp</a></li>
+        <li><a href="#" data-pol>Política de privacidade</a></li>
+      </ul></div>
+      <div><h5>Loja</h5><ul>
+        <li><a href="https://maps.app.goo.gl/Cn7bSAYCp3xWQxk78" target="_blank" rel="noopener">Av. Automóvel Clube, 1961<br>Vilar dos Teles<br>São João de Meriti — RJ</a></li>
+        <li>Seg. a Sex. 8h–18h · Sáb. 8h–14h</li>
+      </ul></div>
+    </div>
+    <div class="ft-bot">
+      <span>© <span id="ano"></span> Start Car Multimarcas. Todos os direitos reservados.</span>
+      <span><a href="#" data-pol>Políticas de Privacidade</a> · Sujeito a análise de crédito</span>
+    </div>
+  </div>
+</footer>
+
+<a class="wa-fx" href="https://wa.me/5521991314232" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.48-1.75-1.65-2.05-.17-.3-.02-.46.13-.61.14-.14.3-.35.45-.53.15-.18.2-.3.3-.5.1-.2.05-.38-.02-.53-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.38-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.42-.07-.13-.27-.2-.57-.35M12 2a10 10 0 00-8.6 15.1L2 22l5.05-1.32A10 10 0 1012 2"/></svg>
+</a>
+
+<div class="ck" id="ck">
+  <div class="wrap">
+    <p>Coletamos dados para melhorar o desempenho do site, além de personalizar conteúdo e anúncios. Você pode configurar suas preferências no seu navegador e conferir a nossa <a href="#" data-pol>Política de Privacidade</a>.</p>
+    <div class="acoes">
+      <button class="btn btn-ghost btn-sm" data-ck="no">Recusar opcionais</button>
+      <button class="btn btn-ouro btn-sm" data-ck="ok">Entendi</button>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+(function () {
+  document.getElementById('ano').textContent = new Date().getFullYear();
+  var $ = function (s) { return document.querySelector(s); };
+
+  var id = new URLSearchParams(location.search).get('veiculo');
+  var carro = id ? SC.byId(id) : null;
+
+  /* --- painel do veículo escolhido --- */
+  var aside = $('#aside');
+  if (carro) {
+    aside.innerHTML =
+      '<div class="tag">Veículo escolhido</div>' +
+      '<img class="foto" src="' + carro.fotos[0] + '" alt="' + SC.nome(carro) + '">' +
+      '<div class="inner">' +
+        '<h4 class="cromo">' + SC.nome(carro) + '</h4>' +
+        '<p class="v">' + carro.versao + '</p>' +
+        '<div class="ficha-prev" style="margin-top:0">' +
+          '<div class="fp"><span>Ano</span><b>' + carro.anoFab + '/' + carro.ano + '</b></div>' +
+          '<div class="fp"><span>Km</span><b>' + SC.km(carro.km) + '</b></div>' +
+          '<div class="fp"><span>Câmbio</span><b>' + carro.cambio + '</b></div>' +
+          '<div class="fp"><span>Comb.</span><b>' + carro.combustivel + '</b></div>' +
+          '<div class="fp"><span>Cor</span><b>' + carro.cor + '</b></div>' +
+          '<div class="fp"><span>Valor</span><b class="ouro">' + SC.preco(carro.preco) + '</b></div>' +
+        '</div>' +
+        '<div class="car-acoes">' +
+          '<button class="btn btn-ghost btn-sm" id="aGal">Ver fotos</button>' +
+          '<a class="btn btn-cromo btn-sm" href="estoque.html">Trocar veículo</a>' +
+        '</div>' +
+      '</div>';
+    aside.querySelector('.foto').addEventListener('error', function () { this.style.display = 'none'; });
+    $('#aGal').addEventListener('click', function () { SC.galeria(carro, 0); });
+  } else {
+    aside.innerHTML =
+      '<div class="tag">Nenhum veículo selecionado</div>' +
+      '<div class="aside-none">' +
+        '<p>Você pode enviar a solicitação assim mesmo — nosso consultor ajuda a escolher o carro ideal para o seu perfil de crédito.</p>' +
+        '<a class="btn btn-ouro btn-block" href="estoque.html">Escolher um veículo</a>' +
+      '</div>';
+  }
+
+  /* --- outros veículos --- */
+  var outros = STOCK.filter(function (c) { return !carro || c.id !== carro.id; }).slice(0, 3);
+  SC.render(outros, '#outros');
+
+  /* --- form --- */
+  var frm = $('#frm');
+  SC.mascaras(frm);
+
+  $('#troca').addEventListener('change', function () {
+    $('#wrapTroca').style.display = this.value === 'Sim' ? 'flex' : 'none';
+  });
+
+  frm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!SC.validar(frm)) { SC.toast('Preencha os campos obrigatórios destacados.'); return; }
+
+    var d = new FormData(frm);
+    var v = function (k) { return (d.get(k) || '').toString().trim(); };
+
+    var linhas = [
+      '*SOLICITAÇÃO DE FINANCIAMENTO — SITE START CAR*',
+      '',
+      carro
+        ? '*Veículo:* ' + SC.nome(carro) + ' ' + carro.versao + ' — ' + carro.anoFab + '/' + carro.ano + ' · ' + SC.km(carro.km) + ' · ' + carro.cor + ' (cód. ' + carro.id + ')'
+        : '*Veículo:* ainda não escolhido',
+      '',
+      '*Nome:* ' + v('nome'),
+      '*CPF:* ' + v('cpf'),
+      '*Nascimento:* ' + v('nasc'),
+      '*Telefone:* ' + v('tel'),
+      v('email') ? '*E-mail:* ' + v('email') : null,
+      '*Profissão:* ' + v('prof'),
+      '*Renda mensal:* ' + v('renda'),
+      v('entrada') ? '*Entrada:* ' + v('entrada') : '*Entrada:* a combinar',
+      '*Parcelas desejadas:* ' + v('parcelas'),
+      '*Troca:* ' + v('troca') + (v('troca') === 'Sim' && v('trocaDesc') ? ' — ' + v('trocaDesc') : ''),
+      v('obs') ? '*Observações:* ' + v('obs') : null
+    ].filter(Boolean);
+
+    window.open(SC.wa(linhas.join('\n')), '_blank');
+    SC.toast('Solicitação montada! Confirme o envio na janela do WhatsApp.');
+  });
+})();
+</script>
+</body>
+</html>
