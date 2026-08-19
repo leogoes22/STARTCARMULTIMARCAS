@@ -1842,15 +1842,30 @@ var STOCK = [
     var ck = $('#ck');
     if (!ck) return;
     var KEY = 'sc_cookies_v1';
-    var ok;
-    try { ok = window.sessionStorage ? null : null; } catch (e) { ok = null; }
-    // Preferência mantida apenas na sessão em memória para não depender de storage
-    if (!window.__scCookieOk) {
+
+    // O consentimento precisa sobreviver a troca de pagina e a visitas futuras.
+    // Ordem: localStorage -> cookie proprio -> memoria (ultimo recurso).
+    function jaAceitou() {
+      try { if (window.localStorage && localStorage.getItem(KEY)) return true; } catch (e) {}
+      try { if (document.cookie.indexOf(KEY + '=') > -1) return true; } catch (e) {}
+      return !!window.__scCookieOk;
+    }
+    function gravarEscolha(valor) {
+      window.__scCookieOk = true;
+      try { if (window.localStorage) localStorage.setItem(KEY, valor); } catch (e) {}
+      try {
+        var d = new Date();
+        d.setFullYear(d.getFullYear() + 1);
+        document.cookie = KEY + '=' + valor + '; expires=' + d.toUTCString() + '; path=/; SameSite=Lax';
+      } catch (e) {}
+    }
+
+    if (!jaAceitou()) {
       setTimeout(function () { ck.classList.add('show'); }, 1200);
     }
     $$('[data-ck]', ck).forEach(function (b) {
       b.addEventListener('click', function () {
-        window.__scCookieOk = true;
+        gravarEscolha(b.dataset.ck === 'ok' ? 'aceito' : 'recusado');
         ck.classList.remove('show');
         if (b.dataset.ck === 'ok') SC.toast('Preferências de cookies salvas. Obrigado!');
       });
