@@ -939,7 +939,7 @@ h1, h2, h3, .t {
 
     <div class="res-info">
       <p><b id="qtd">0</b> veículo(s) encontrado(s)</p>
-      <p style="color:var(--txt-3);font-size:.84rem">Preços sob consulta · Fale com um consultor para condições e simulação</p>
+      <p style="color:var(--txt-3);font-size:.84rem" data-atualizado>Fale com um consultor para condições e simulação</p>
     </div>
 
     <div class="grid-cars" id="grid"></div>
@@ -1015,7 +1015,16 @@ h1, h2, h3, .t {
        mantendo os mesmos nomes de campos. <<<
    ========================================================= */
 
+/* =========================================================
+   INTEGRAÇÃO COM O CRM / AUTOCERTO
+   Endpoint do workflow n8n "Start Car · 02 Entrega Estoque".
+   Enquanto estiver com SEU-N8N, o site usa o estoque embutido
+   abaixo. Troque pela URL real e a vitrine passa a ser ao vivo.
+   ========================================================= */
+var API_ESTOQUE = 'https://SEU-N8N.com.br/webhook/estoque-startcar';
+
 var LOJA = {
+  api: API_ESTOQUE,
   nome: 'Start Car Multimarcas',
   slogan: 'Tradicional agência de revenda de veículos',
   telefone: '(21) 99131-4232',
@@ -1256,6 +1265,48 @@ var STOCK = [
     t.classList.add('show');
     clearTimeout(t._tm);
     t._tm = setTimeout(function () { t.classList.remove('show'); }, 4200);
+  };
+
+  /* ---------- Sincronização com o estoque ao vivo ----------
+     Busca o estoque no webhook do n8n. Se falhar, demorar demais
+     ou vier vazio, o site continua com o estoque embutido em data.js.
+     ---------------------------------------------------------- */
+  SC.atualizadoEm = null;
+
+  SC.sync = function (aoAtualizar) {
+    var url = (typeof LOJA !== 'undefined' && LOJA.api) ? LOJA.api : '';
+    if (!url || url.indexOf('SEU-N8N') > -1 || typeof fetch !== 'function') return;
+
+    var opcoes = {}, ctrl;
+    try {
+      ctrl = new AbortController();
+      opcoes.signal = ctrl.signal;
+      setTimeout(function () { try { ctrl.abort(); } catch (e) {} }, 8000);
+    } catch (e) {}
+
+    fetch(url, opcoes)
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+      .then(function (d) {
+        if (!d || d.ok !== true || !Array.isArray(d.veiculos) || !d.veiculos.length) {
+          return Promise.reject('cache vazio');
+        }
+        STOCK.length = 0;
+        d.veiculos.forEach(function (v) { STOCK.push(v); });
+        SC.atualizadoEm = d.atualizadoEm || null;
+        SC.marcarAtualizacao();
+        if (typeof aoAtualizar === 'function') aoAtualizar(STOCK);
+      })
+      .catch(function () { /* silencioso: mantém o estoque embutido */ });
+  };
+
+  SC.marcarAtualizacao = function () {
+    if (!SC.atualizadoEm) return;
+    var d = new Date(SC.atualizadoEm);
+    if (isNaN(d)) return;
+    var txt = 'Estoque atualizado em ' +
+      d.toLocaleDateString('pt-BR') + ' às ' +
+      d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    $$('[data-atualizado]').forEach(function (el) { el.textContent = txt; });
   };
 
   /* ---------- Header ---------- */
@@ -1599,15 +1650,30 @@ var STOCK = [
     var ck = $('#ck');
     if (!ck) return;
     var KEY = 'sc_cookies_v1';
-    var ok;
-    try { ok = window.sessionStorage ? null : null; } catch (e) { ok = null; }
-    // Preferência mantida apenas na sessão em memória para não depender de storage
-    if (!window.__scCookieOk) {
+
+    // O consentimento precisa sobreviver a troca de pagina e a visitas futuras.
+    // Ordem: localStorage -> cookie proprio -> memoria (ultimo recurso).
+    function jaAceitou() {
+      try { if (window.localStorage && localStorage.getItem(KEY)) return true; } catch (e) {}
+      try { if (document.cookie.indexOf(KEY + '=') > -1) return true; } catch (e) {}
+      return !!window.__scCookieOk;
+    }
+    function gravarEscolha(valor) {
+      window.__scCookieOk = true;
+      try { if (window.localStorage) localStorage.setItem(KEY, valor); } catch (e) {}
+      try {
+        var d = new Date();
+        d.setFullYear(d.getFullYear() + 1);
+        document.cookie = KEY + '=' + valor + '; expires=' + d.toUTCString() + '; path=/; SameSite=Lax';
+      } catch (e) {}
+    }
+
+    if (!jaAceitou()) {
       setTimeout(function () { ck.classList.add('show'); }, 1200);
     }
     $$('[data-ck]', ck).forEach(function (b) {
       b.addEventListener('click', function () {
-        window.__scCookieOk = true;
+        gravarEscolha(b.dataset.ck === 'ok' ? 'aceito' : 'recusado');
         ck.classList.remove('show');
         if (b.dataset.ck === 'ok') SC.toast('Preferências de cookies salvas. Obrigado!');
       });
@@ -1701,14 +1767,17 @@ var STOCK = [
 
   var $ = function (s) { return document.querySelector(s); };
 
-  // popular selects
-  var marcas = [], combs = [];
-  STOCK.forEach(function (c) {
-    if (marcas.indexOf(c.marca) < 0) marcas.push(c.marca);
-    if (combs.indexOf(c.combustivel) < 0) combs.push(c.combustivel);
-  });
-  marcas.sort().forEach(function (m) { $('#fMarca').insertAdjacentHTML('beforeend', '<option>' + m + '</option>'); });
-  combs.sort().forEach(function (m) { $('#fComb').insertAdjacentHTML('beforeend', '<option>' + m + '</option>'); });
+  // popular selects a partir do estoque atual, preservando a escolha do usuário
+  function popular() {
+    [['#fMarca', 'marca', 'Todas as marcas'], ['#fComb', 'combustivel', 'Combustível']].forEach(function (cfg) {
+      var el = $(cfg[0]), atual = el.value, vals = [];
+      STOCK.forEach(function (c) { if (vals.indexOf(c[cfg[1]]) < 0) vals.push(c[cfg[1]]); });
+      el.innerHTML = '<option value="">' + cfg[2] + '</option>';
+      vals.sort().forEach(function (v) { el.insertAdjacentHTML('beforeend', '<option>' + v + '</option>'); });
+      if (vals.indexOf(atual) > -1) el.value = atual;
+    });
+  }
+  popular();
 
   function aplicar() {
     var q = $('#fBusca').value.trim().toLowerCase();
@@ -1748,6 +1817,9 @@ var STOCK = [
   });
 
   aplicar();
+
+  // busca o estoque ao vivo e repinta a vitrine
+  SC.sync(function () { popular(); aplicar(); });
 
   // abre direto um veículo se vier ?veiculo=ID
   var id = new URLSearchParams(location.search).get('veiculo');
